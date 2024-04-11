@@ -7,17 +7,31 @@ interface Todo {
   userId: number;
 }
 
+interface TodoResponse {
+  todos: Todo[];
+}
+
 function App() {
-  const { data } = useQuery<Todo[] | undefined>({
+  const { data } = useQuery<TodoResponse | undefined>({
     queryKey: ["todos"],
     queryFn: async () => {
       const res = await fetch("https://dummyjson.com/todos");
       return res.json();
     },
   });
-  console.log(data);
 
-  return <h1>TODO</h1>;
+  const todoList = () => {
+    if (!data || data.todos.length === 0) return "No todo";
+
+    return data.todos.map((todo) => <li key={todo.id}>{todo.todo}</li>);
+  };
+
+  return (
+    <>
+      <h1>TODO</h1>
+      <ul>{todoList()}</ul>
+    </>
+  );
 }
 
 export default App;
