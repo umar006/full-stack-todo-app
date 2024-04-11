@@ -1,7 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 
+interface Todo {
+  id: number;
+  todo: string;
+  completed: boolean;
+  userId: number;
+}
+
 function App() {
-  const { data } = useQuery({
+  const { data } = useQuery<Todo[] | undefined>({
     queryKey: ["todos"],
     queryFn: async () => {
       const res = await fetch("https://dummyjson.com/todos");
