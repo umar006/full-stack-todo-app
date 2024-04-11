@@ -13,11 +13,13 @@
       "dom",
       "dom.iterable"
     ],
+    "verbatimModuleSyntax": true,
     /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,
     /* Bundler mode */
-    "module": "preserve",
+    "moduleResolution": "bundler",
+    "jsx": "preserve",
     "noEmit": true
   },
   "include": [
