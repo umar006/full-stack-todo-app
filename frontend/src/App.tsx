@@ -49,11 +49,30 @@ function App() {
     },
   });
 
-  const todoList = () => {
+  const inProgressTodoList = () => {
     if (isLoading) return "Loading...";
     if (!data || data.todos.length === 0) return "No todo";
 
-    return data.todos.map((todo) => <li key={todo.id}>{todo.todo}</li>);
+    const todos = [];
+    for (let i = 0; i < data.todos.length; i++) {
+      const todo = data.todos[i];
+      if (!todo?.completed) todos.push(<li key={todo?.id}>{todo?.todo}</li>);
+    }
+
+    return todos;
+  };
+
+  const completedTodoList = () => {
+    if (isLoading) return "Loading...";
+    if (!data || data.todos.length === 0) return "No todo";
+
+    const todos = [];
+    for (let i = 0; i < data.todos.length; i++) {
+      const todo = data.todos[i];
+      if (todo?.completed) todos.push(<li key={todo?.id}>{todo?.todo}</li>);
+    }
+
+    return todos;
   };
 
   const handleTodoChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +96,9 @@ function App() {
         />
         <button type="submit">add</button>
       </form>
-      <ul>{todoList()}</ul>
+      <ul>{inProgressTodoList()}</ul>
+      <h2>Completed TODO</h2>
+      <ul>{completedTodoList()}</ul>
     </>
   );
 }
