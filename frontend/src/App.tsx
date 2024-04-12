@@ -27,7 +27,7 @@ function App() {
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
+  const createMutation = useMutation({
     mutationFn: async () => {
       const res = await fetch("https://dummyjson.com/todos/add", {
         method: "POST",
@@ -115,7 +115,7 @@ function App() {
 
   const handleAddTodo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutation.mutate();
+    createMutation.mutate();
   };
 
   return (
