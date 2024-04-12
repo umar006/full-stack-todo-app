@@ -12,6 +12,8 @@ interface TodoResponse {
   todos: Todo[];
 }
 
+interface UpdateTodo extends Pick<Todo, "id" | "todo" | "completed"> {}
+
 function App() {
   const { data, isLoading } = useQuery<TodoResponse>({
     queryKey: ["todos"],
@@ -49,6 +51,17 @@ function App() {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: async (todo: UpdateTodo) => {
+      const res = await fetch(`https://dummyjson.com/todos/${todo.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ todo: todo.todo, completed: todo.completed }),
+      });
+      return res.json();
+    },
+  });
+
   const inProgressTodoList = () => {
     if (isLoading) return "Loading...";
     if (!data || data.todos.length === 0) return "No todo";
@@ -56,11 +69,14 @@ function App() {
     const todos = [];
     for (let i = 0; i < data.todos.length; i++) {
       const todo = data.todos[i];
-      if (todo?.completed) continue;
+      if (!todo || todo.completed) continue;
 
       todos.push(
         <li key={todo?.id}>
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            onClick={() => updateMutation.mutate({ ...todo, completed: true })}
+          />
           {todo?.todo}
         </li>,
       );
@@ -76,11 +92,15 @@ function App() {
     const todos = [];
     for (let i = 0; i < data.todos.length; i++) {
       const todo = data.todos[i];
-      if (!todo?.completed) continue;
+      if (!todo || !todo.completed) continue;
 
       todos.push(
         <li key={todo?.id}>
-          <input type="checkbox" defaultChecked />
+          <input
+            type="checkbox"
+            onClick={() => updateMutation.mutate({ ...todo, completed: false })}
+            defaultChecked
+          />
           {todo?.todo}
         </li>,
       );
