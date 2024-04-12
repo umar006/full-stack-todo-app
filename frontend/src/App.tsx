@@ -56,7 +56,14 @@ function App() {
     const todos = [];
     for (let i = 0; i < data.todos.length; i++) {
       const todo = data.todos[i];
-      if (!todo?.completed) todos.push(<li key={todo?.id}>{todo?.todo}</li>);
+      if (todo?.completed) continue;
+
+      todos.push(
+        <li key={todo?.id}>
+          <input type="checkbox" />
+          {todo?.todo}
+        </li>,
+      );
     }
 
     return todos;
@@ -69,7 +76,14 @@ function App() {
     const todos = [];
     for (let i = 0; i < data.todos.length; i++) {
       const todo = data.todos[i];
-      if (todo?.completed) todos.push(<li key={todo?.id}>{todo?.todo}</li>);
+      if (!todo?.completed) continue;
+
+      todos.push(
+        <li key={todo?.id}>
+          <input type="checkbox" defaultChecked />
+          {todo?.todo}
+        </li>,
+      );
     }
 
     return todos;
