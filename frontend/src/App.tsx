@@ -68,6 +68,9 @@ function App() {
         return { todos: oldData.todos };
       });
     },
+    onError: (err) => {
+      console.error(err);
+    },
   });
 
   const inProgressTodoList = () => {
