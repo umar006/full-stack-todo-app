@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState, type ChangeEvent } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 interface Todo {
   id: number;
@@ -23,6 +23,20 @@ function App() {
 
   const [todo, setTodo] = useState("");
 
+  const mutation = useMutation({
+    mutationFn: async () => {
+      await fetch("https://dummyjson.com/todos/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          todo: todo,
+          completed: false,
+          userId: 1,
+        }),
+      });
+    },
+  });
+
   const todoList = () => {
     if (isLoading) return "Loading...";
     if (!data || data.todos.length === 0) return "No todo";
@@ -34,10 +48,15 @@ function App() {
     setTodo(e.target.value);
   };
 
+  const handleAddTodo = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mutation.mutate();
+  };
+
   return (
     <>
       <h1>TODO</h1>
-      <form>
+      <form onSubmit={handleAddTodo}>
         <input
           type="text"
           placeholder="Add new todo.."
