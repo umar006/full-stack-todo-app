@@ -44,6 +44,9 @@ function App() {
       });
       setTodo("");
     },
+    onError: (err) => {
+      console.error(err);
+    },
   });
 
   const todoList = () => {
