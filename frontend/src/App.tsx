@@ -32,6 +32,7 @@ function App() {
       <h1>TODO</h1>
       <form>
         <input type="text" />
+        <input type="text" placeholder="Add new todo.." />
         <button type="submit">add</button>
       </form>
       <ul>{todoList()}</ul>
