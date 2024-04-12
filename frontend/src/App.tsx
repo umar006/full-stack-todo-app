@@ -29,6 +29,10 @@ function App() {
   return (
     <>
       <h1>TODO</h1>
+      <form>
+        <input type="text" />
+        <button type="submit">add</button>
+      </form>
       <ul>{todoList()}</ul>
     </>
   );
