@@ -60,6 +60,14 @@ function App() {
       });
       return res.json();
     },
+    onSuccess: (data: Todo) => {
+      queryClient.setQueryData(["todos"], (oldData: TodoResponse) => {
+        for (let i = 0; i < oldData.todos.length; i++) {
+          if (oldData.todos[i]?.id === data.id) oldData.todos[i] = data;
+        }
+        return { todos: oldData.todos };
+      });
+    },
   });
 
   const inProgressTodoList = () => {
