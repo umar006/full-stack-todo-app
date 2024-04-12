@@ -35,6 +35,9 @@ function App() {
         }),
       });
     },
+    onSuccess: () => {
+      setTodo("");
+    },
   });
 
   const todoList = () => {
