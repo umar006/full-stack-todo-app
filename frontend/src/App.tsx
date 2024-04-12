@@ -12,7 +12,7 @@ interface TodoResponse {
 }
 
 function App() {
-  const { data } = useQuery<TodoResponse | undefined>({
+  const { data, isLoading } = useQuery<TodoResponse | undefined>({
     queryKey: ["todos"],
     queryFn: async () => {
       const res = await fetch("https://dummyjson.com/todos");
@@ -21,6 +21,7 @@ function App() {
   });
 
   const todoList = () => {
+    if (isLoading) return "Loading...";
     if (!data || data.todos.length === 0) return "No todo";
 
     return data.todos.map((todo) => <li key={todo.id}>{todo.todo}</li>);
