@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 
 interface Todo {
@@ -13,7 +13,7 @@ interface TodoResponse {
 }
 
 function App() {
-  const { data, isLoading } = useQuery<TodoResponse | undefined>({
+  const { data, isLoading } = useQuery<TodoResponse>({
     queryKey: ["todos"],
     queryFn: async () => {
       const res = await fetch("https://dummyjson.com/todos");
@@ -23,9 +23,11 @@ function App() {
 
   const [todo, setTodo] = useState("");
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: async () => {
-      await fetch("https://dummyjson.com/todos/add", {
+      const res = await fetch("https://dummyjson.com/todos/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -34,8 +36,12 @@ function App() {
           userId: 1,
         }),
       });
+      return res.json();
     },
-    onSuccess: () => {
+    onSuccess: (data: Todo) => {
+      queryClient.setQueryData(["todos"], (oldData: TodoResponse) => {
+        return { todos: oldData.todos.concat(data) };
+      });
       setTodo("");
     },
   });
