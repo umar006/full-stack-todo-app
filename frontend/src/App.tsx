@@ -109,6 +109,8 @@ function App() {
           span.setAttribute("data-id", String(todo.id));
           span.textContent = input.value;
 
+          updateMutation.mutate({ ...todo, todo: input.value });
+
           input.replaceWith(span);
         };
 
