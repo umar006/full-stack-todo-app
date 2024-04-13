@@ -97,14 +97,33 @@ function App() {
       const todo = data.todos[i];
       if (!todo || todo.completed) continue;
 
+      const handleTodoEdit = () => {
+        const input = document.createElement("input");
+        input.setAttribute("value", todo.todo);
+
+        const todoQuery = document.querySelector(`[data-id="${todo.id}"]`);
+        todoQuery?.replaceWith(input);
+
+        const update = () => {
+          const span = document.createElement("span");
+          span.setAttribute("data-id", String(todo.id));
+          span.textContent = input.value;
+
+          input.replaceWith(span);
+        };
+
+        input.addEventListener("blur", update, { once: true });
+        input.focus();
+      };
+
       todos.push(
         <li key={todo?.id}>
           <input
             type="checkbox"
             onClick={() => updateMutation.mutate({ ...todo, completed: true })}
           />
-          {todo?.todo}
-          <button>edit</button>
+          <span data-id={todo.id}>{todo?.todo}</span>
+          <button onClick={handleTodoEdit}>edit</button>
           <button onClick={() => deleteMutation.mutate(todo)}>delete</button>
         </li>,
       );
