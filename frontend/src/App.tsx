@@ -13,6 +13,7 @@ interface TodoResponse {
 }
 
 interface UpdateTodo extends Pick<Todo, "id" | "todo" | "completed"> {}
+interface DeleteTodo extends Pick<Todo, "id"> {}
 
 function App() {
   const { data, isLoading } = useQuery<TodoResponse>({
@@ -73,6 +74,20 @@ function App() {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: async (todo: DeleteTodo) => {
+      const res = await fetch(`https://dummyjson.com/todos/${todo.id}`, {
+        method: "DELETE",
+      });
+      return res.json();
+    },
+    onSuccess: (data: Todo) => {
+      queryClient.setQueryData(["todos"], (oldData: TodoResponse) => {
+        return { todos: oldData.todos.filter((todo) => todo.id !== data.id) };
+      });
+    },
+  });
+
   const inProgressTodoList = () => {
     if (isLoading) return "Loading...";
     if (!data || data.todos.length === 0) return "No todo";
@@ -89,7 +104,7 @@ function App() {
             onClick={() => updateMutation.mutate({ ...todo, completed: true })}
           />
           {todo?.todo}
-          <button>delete</button>
+          <button onClick={() => deleteMutation.mutate(todo)}>delete</button>
         </li>,
       );
     }
@@ -114,7 +129,7 @@ function App() {
             defaultChecked
           />
           {todo?.todo}
-          <button>delete</button>
+          <button onClick={() => deleteMutation.mutate(todo)}>delete</button>
         </li>,
       );
     }
