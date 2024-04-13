@@ -113,6 +113,7 @@ function App() {
         };
 
         input.addEventListener("blur", update, { once: true });
+        input.setSelectionRange(todo.todo.length, todo.todo.length);
         input.focus();
       };
 
