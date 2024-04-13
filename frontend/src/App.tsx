@@ -104,6 +104,7 @@ function App() {
             onClick={() => updateMutation.mutate({ ...todo, completed: true })}
           />
           {todo?.todo}
+          <button>edit</button>
           <button onClick={() => deleteMutation.mutate(todo)}>delete</button>
         </li>,
       );
