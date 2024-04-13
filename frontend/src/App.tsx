@@ -89,6 +89,7 @@ function App() {
             onClick={() => updateMutation.mutate({ ...todo, completed: true })}
           />
           {todo?.todo}
+          <button>delete</button>
         </li>,
       );
     }
@@ -113,6 +114,7 @@ function App() {
             defaultChecked
           />
           {todo?.todo}
+          <button>delete</button>
         </li>,
       );
     }
