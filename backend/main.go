@@ -3,8 +3,15 @@ package main
 import (
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
+
+type Todo struct {
+	Id        uuid.UUID `db:"id"`
+	Todo      string    `db:"todo"`
+	Completed bool      `db:"completed"`
+}
 
 func main() {
 	e := echo.New()
