@@ -26,6 +26,8 @@ func main() {
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
 
+	e.Use(middleware.Logger())
+
 	todoRoutes := e.Group("/api/todos")
 
 	todoRoutes.GET("", func(c echo.Context) error {
