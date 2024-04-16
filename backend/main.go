@@ -29,7 +29,16 @@ func main() {
 
 	e := echo.New()
 
-	e.GET("/", func(c echo.Context) error { return c.String(http.StatusOK, "Hello, World!") })
+	e.GET("/todos", func(c echo.Context) error {
+		todos := []Todo{}
+
+		err := db.Select(&todos, "SELECT * FROM todos")
+		if err != nil {
+			e.Logger.Error(err)
+		}
+
+		return c.JSON(http.StatusOK, todos)
+	})
 
 	e.Logger.Fatal(e.Start(":9000"))
 }
