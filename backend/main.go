@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
 )
 
@@ -28,8 +29,11 @@ func main() {
 	}
 
 	e := echo.New()
+	e.Pre(middleware.RemoveTrailingSlash())
 
-	e.GET("/todos", func(c echo.Context) error {
+	todoRoutes := e.Group("/api/todos")
+
+	todoRoutes.GET("", func(c echo.Context) error {
 		todos := []Todo{}
 
 		err := db.Select(&todos, "SELECT * FROM todos")
@@ -40,7 +44,7 @@ func main() {
 		return c.JSON(http.StatusOK, todos)
 	})
 
-	e.POST("/todos", func(c echo.Context) error {
+	todoRoutes.POST("", func(c echo.Context) error {
 		todo := NewTodo()
 		if err := c.Bind(&todo); err != nil {
 			return c.JSON(http.StatusBadRequest, err)
@@ -54,7 +58,7 @@ func main() {
 		return c.JSON(http.StatusCreated, todo)
 	})
 
-	e.PUT("/todos/:todoId", func(c echo.Context) error {
+	todoRoutes.PUT("/:todoId", func(c echo.Context) error {
 		todoId := c.Param("todoId")
 		parsedTodoId, err := uuid.Parse(todoId)
 		if err != nil {
@@ -76,7 +80,7 @@ func main() {
 		return c.JSON(http.StatusCreated, todo)
 	})
 
-	e.DELETE("/todos/:todoId", func(c echo.Context) error {
+	todoRoutes.DELETE("/:todoId", func(c echo.Context) error {
 		todoId := c.Param("todoId")
 		parsedTodoId, err := uuid.Parse(todoId)
 		if err != nil {
