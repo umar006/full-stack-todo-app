@@ -54,6 +54,28 @@ func main() {
 		return c.JSON(http.StatusCreated, todo)
 	})
 
+	e.PUT("/todos/:todoId", func(c echo.Context) error {
+		todoId := c.Param("todoId")
+		parsedTodoId, err := uuid.Parse(todoId)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, "todo not found")
+		}
+
+		todo := NewTodo()
+		todo.Id = parsedTodoId
+
+		if err := c.Bind(&todo); err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
+
+		_, err = db.NamedExec("UPDATE todos SET todo = :todo, completed = :completed WHERE id = :id", todo)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusCreated, todo)
+	})
+
 	e.Logger.Fatal(e.Start(":9000"))
 }
 
