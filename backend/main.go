@@ -12,13 +12,13 @@ import (
 )
 
 type Todo struct {
-	Id        uuid.UUID `db:"id"`
-	Todo      string    `db:"todo"`
-	Completed bool      `db:"completed"`
+	Id        uuid.UUID `db:"id" json:"id"`
+	Todo      string    `db:"todo" json:"todo"`
+	Completed bool      `db:"completed" json:"completed"`
 }
 
 func main() {
-	db, err := sqlx.Open("postgres", os.Getenv("DB_URL"))
+	db, err := sqlx.Connect("postgres", os.Getenv("DB_URL"))
 	if err != nil {
 		log.Fatalf("error opening database: %w", err)
 	}
@@ -40,5 +40,23 @@ func main() {
 		return c.JSON(http.StatusOK, todos)
 	})
 
+	e.POST("/todos", func(c echo.Context) error {
+		todo := NewTodo()
+		if err := c.Bind(&todo); err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
+
+		_, err := db.NamedExec("INSERT INTO todos (id, todo) VALUES (:id, :todo)", todo)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusCreated, todo)
+	})
+
 	e.Logger.Fatal(e.Start(":9000"))
+}
+
+func NewTodo() Todo {
+	return Todo{Id: uuid.New()}
 }
