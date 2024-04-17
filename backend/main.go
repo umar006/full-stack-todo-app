@@ -28,6 +28,8 @@ func main() {
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
 
+	e.Use(middleware.RequestID())
+
 	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
 		LogURI:       true,
@@ -35,10 +37,12 @@ func main() {
 		LogMethod:    true,
 		LogLatency:   true,
 		LogUserAgent: true,
+		LogRequestID: true,
 		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
 			logger.Info().
 				Str("method", v.Method).
 				Str("user_agent", v.UserAgent).
+				Str("correlation_id", v.RequestID).
 				Str("URI", v.URI).
 				Int("status_code", v.Status).
 				Dur("elapsed_ms", time.Since(v.StartTime)).
