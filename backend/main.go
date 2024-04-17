@@ -4,12 +4,14 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
+	"github.com/rs/zerolog"
 	"todo.umaru.run/models"
 )
 
@@ -26,7 +28,25 @@ func main() {
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
 
-	e.Use(middleware.Logger())
+	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
+	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
+		LogURI:       true,
+		LogStatus:    true,
+		LogMethod:    true,
+		LogLatency:   true,
+		LogUserAgent: true,
+		LogValuesFunc: func(c echo.Context, v middleware.RequestLoggerValues) error {
+			logger.Info().
+				Str("method", v.Method).
+				Str("user_agent", v.UserAgent).
+				Str("URI", v.URI).
+				Int("status_code", v.Status).
+				Dur("elapsed_ms", time.Since(v.StartTime)).
+				Msg("incoming request")
+
+			return nil
+		},
+	}))
 
 	todoRoutes := e.Group("/api/todos")
 
