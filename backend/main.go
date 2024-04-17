@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -33,7 +34,12 @@ func main() {
 
 	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 
-	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
+	var output io.Writer = zerolog.ConsoleWriter{
+		Out:        os.Stdout,
+		TimeFormat: time.RFC3339,
+	}
+
+	logger := zerolog.New(output).With().Timestamp().Logger()
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
 		LogURI:       true,
 		LogStatus:    true,
