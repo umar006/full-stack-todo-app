@@ -20,11 +20,11 @@ import (
 func main() {
 	db, err := sqlx.Connect("postgres", os.Getenv("DB_URL"))
 	if err != nil {
-		log.Fatalf("error opening database: %w", err)
+		log.Fatalf("error opening database: %v", err)
 	}
 	err = db.Ping()
 	if err != nil {
-		log.Fatalf("error connecting to database: %w", err)
+		log.Fatalf("error connecting to database: %v", err)
 	}
 
 	e := echo.New()
