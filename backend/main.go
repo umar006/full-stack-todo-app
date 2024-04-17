@@ -62,7 +62,7 @@ func main() {
 
 		err := db.Select(&todos, "SELECT * FROM todos")
 		if err != nil {
-			e.Logger.Error(err)
+			return c.JSON(http.StatusInternalServerError, err)
 		}
 
 		return c.JSON(http.StatusOK, todos)
