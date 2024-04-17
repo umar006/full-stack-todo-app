@@ -12,6 +12,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/pkgerrors"
 	"todo.umaru.run/models"
 )
 
@@ -29,6 +30,8 @@ func main() {
 	e.Pre(middleware.RemoveTrailingSlash())
 
 	e.Use(middleware.RequestID())
+
+	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 
 	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 	e.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{
