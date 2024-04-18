@@ -1,14 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type ChangeEvent, type FormEvent } from "react";
+import { getTodos } from "./services/todoServices";
 import type { DeleteTodo, Todo, TodoResponse, UpdateTodo } from "./types/todo";
 
 function App() {
   const { data, isLoading } = useQuery<TodoResponse>({
     queryKey: ["todos"],
-    queryFn: async () => {
-      const res = await fetch("https://dummyjson.com/todos");
-      return res.json();
-    },
+    queryFn: getTodos,
   });
 
   const [todo, setTodo] = useState("");
