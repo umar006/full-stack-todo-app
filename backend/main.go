@@ -30,6 +30,7 @@ func main() {
 	e := echo.New()
 	e.Pre(middleware.RemoveTrailingSlash())
 
+	e.Use(middleware.CORS())
 	e.Use(middleware.RequestID())
 
 	logger := logger.Get()
