@@ -27,3 +27,10 @@ export const updateTodo = async (todo: UpdateTodo) => {
   });
   return res.json();
 };
+
+export const deleteTodo = async (todo: DeleteTodo) => {
+  const res = await fetch(`https://dummyjson.com/todos/${todo.id}`, {
+    method: "DELETE",
+  });
+  return res.json();
+};

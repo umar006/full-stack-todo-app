@@ -1,7 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { createTodo, getTodos, updateTodo } from "./services/todoServices";
-import type { DeleteTodo, Todo, TodoResponse } from "./types/todo";
+import {
+  createTodo,
+  deleteTodo,
+  getTodos,
+  updateTodo,
+} from "./services/todoServices";
+import type { Todo, TodoResponse } from "./types/todo";
 
 function App() {
   const { data, isLoading } = useQuery<TodoResponse>({
@@ -42,12 +47,7 @@ function App() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (todo: DeleteTodo) => {
-      const res = await fetch(`https://dummyjson.com/todos/${todo.id}`, {
-        method: "DELETE",
-      });
-      return res.json();
-    },
+    mutationFn: deleteTodo,
     onSuccess: (data: Todo) => {
       queryClient.setQueryData(["todos"], (oldData: TodoResponse) => {
         return { todos: oldData.todos.filter((todo) => todo.id !== data.id) };
