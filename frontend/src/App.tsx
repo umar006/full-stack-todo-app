@@ -1,19 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-
-interface Todo {
-  id: number;
-  todo: string;
-  completed: boolean;
-  userId: number;
-}
-
-interface TodoResponse {
-  todos: Todo[];
-}
-
-interface UpdateTodo extends Pick<Todo, "id" | "todo" | "completed"> {}
-interface DeleteTodo extends Pick<Todo, "id"> {}
+import type { DeleteTodo, Todo, TodoResponse, UpdateTodo } from "./types/todo";
 
 function App() {
   const { data, isLoading } = useQuery<TodoResponse>({
