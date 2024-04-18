@@ -15,6 +15,8 @@ import (
 	"todo.umaru.run/models"
 )
 
+type response map[string]any
+
 func main() {
 	db, err := sqlx.Connect("postgres", os.Getenv("DB_URL"))
 	if err != nil {
@@ -63,7 +65,7 @@ func main() {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
-		return c.JSON(http.StatusOK, todos)
+		return c.JSON(http.StatusOK, response{"data": todos})
 	})
 
 	todoRoutes.POST("", func(c echo.Context) error {
@@ -77,7 +79,7 @@ func main() {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
-		return c.JSON(http.StatusCreated, todo)
+		return c.JSON(http.StatusCreated, response{"data": todo})
 	})
 
 	todoRoutes.PUT("/:todoId", func(c echo.Context) error {
@@ -99,7 +101,7 @@ func main() {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
-		return c.JSON(http.StatusCreated, todo)
+		return c.JSON(http.StatusCreated, response{"data": todo})
 	})
 
 	todoRoutes.DELETE("/:todoId", func(c echo.Context) error {
