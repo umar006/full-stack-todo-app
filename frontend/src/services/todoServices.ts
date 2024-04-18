@@ -55,8 +55,7 @@ export const updateTodo = async (todo: UpdateTodo) => {
 };
 
 export const deleteTodo = async (todo: DeleteTodo) => {
-  const res = await fetch(`https://dummyjson.com/todos/${todo.id}`, {
+  await fetch(`${BASE_URL}/${todo.id}`, {
     method: "DELETE",
   });
-  return res.json();
 };

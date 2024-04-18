@@ -6,7 +6,7 @@ import {
   getTodos,
   updateTodo,
 } from "./services/todoServices";
-import type { Todo, TodoResponse, TodosResponse } from "./types/todo";
+import type { TodoResponse, TodosResponse } from "./types/todo";
 
 function App() {
   const { data, isLoading } = useQuery<TodosResponse>({
@@ -49,9 +49,11 @@ function App() {
 
   const deleteMutation = useMutation({
     mutationFn: deleteTodo,
-    onSuccess: (data: Todo) => {
+    onSuccess: (_: void, deleteTodo) => {
       queryClient.setQueryData(["todos"], (oldData: TodosResponse) => {
-        return { todos: oldData.todos.filter((todo) => todo.id !== data.id) };
+        return {
+          todos: oldData.todos.filter((todo) => todo.id !== deleteTodo.id),
+        };
       });
     },
   });
