@@ -80,7 +80,7 @@ func main() {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
-		return c.JSON(http.StatusCreated, response{"data": todo})
+		return c.JSON(http.StatusCreated, response{"todo": todo})
 	})
 
 	todoRoutes.PUT("/:todoId", func(c echo.Context) error {
@@ -102,7 +102,7 @@ func main() {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
-		return c.JSON(http.StatusCreated, response{"data": todo})
+		return c.JSON(http.StatusCreated, response{"todo": todo})
 	})
 
 	todoRoutes.DELETE("/:todoId", func(c echo.Context) error {
