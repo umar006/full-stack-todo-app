@@ -13,6 +13,13 @@ const todosSchema = z.object({
   ),
 });
 
+const todoSchema = z.object({
+  todo: z.object({
+    id: z.string(),
+    todo: z.string(),
+    completed: z.boolean(),
+  }),
+});
 
 export const getTodos = async () => {
   const res = await fetch(BASE_URL);
@@ -22,7 +29,7 @@ export const getTodos = async () => {
 };
 
 export const createTodo = async (todo: NewTodo) => {
-  const res = await fetch("https://dummyjson.com/todos/add", {
+  const res = await fetch(BASE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -31,8 +38,9 @@ export const createTodo = async (todo: NewTodo) => {
       userId: 1,
     }),
   });
+  const data = todoSchema.parse(await res.json());
 
-  return res.json();
+  return data;
 };
 
 export const updateTodo = async (todo: UpdateTodo) => {
