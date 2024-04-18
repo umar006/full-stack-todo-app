@@ -1,8 +1,22 @@
-import type { NewTodo, UpdateTodo } from "../types/todo";
+import { z } from "zod";
+import type { DeleteTodo, NewTodo, UpdateTodo } from "../types/todo";
+
+const todosSchema = z.object({
+  todos: z.array(
+    z.object({
+      id: z.string(),
+      todo: z.string(),
+      completed: z.boolean(),
+    }),
+  ),
+});
+
 
 export const getTodos = async () => {
   const res = await fetch("https://dummyjson.com/todos");
-  return res.json();
+  const data = todosSchema.parse(await res.json());
+
+  return data;
 };
 
 export const createTodo = async (todo: NewTodo) => {
