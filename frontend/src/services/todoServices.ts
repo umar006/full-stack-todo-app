@@ -1,4 +1,4 @@
-import type { NewTodo } from "../types/todo";
+import type { NewTodo, UpdateTodo } from "../types/todo";
 
 export const getTodos = async () => {
   const res = await fetch("https://dummyjson.com/todos");
@@ -16,5 +16,14 @@ export const createTodo = async (todo: NewTodo) => {
     }),
   });
 
+  return res.json();
+};
+
+export const updateTodo = async (todo: UpdateTodo) => {
+  const res = await fetch(`https://dummyjson.com/todos/${todo.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ todo: todo.todo, completed: todo.completed }),
+  });
   return res.json();
 };

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { createTodo, getTodos } from "./services/todoServices";
-import type { DeleteTodo, Todo, TodoResponse, UpdateTodo } from "./types/todo";
+import { createTodo, getTodos, updateTodo } from "./services/todoServices";
+import type { DeleteTodo, Todo, TodoResponse } from "./types/todo";
 
 function App() {
   const { data, isLoading } = useQuery<TodoResponse>({
@@ -27,14 +27,7 @@ function App() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: async (todo: UpdateTodo) => {
-      const res = await fetch(`https://dummyjson.com/todos/${todo.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ todo: todo.todo, completed: todo.completed }),
-      });
-      return res.json();
-    },
+    mutationFn: updateTodo,
     onSuccess: (data: Todo) => {
       queryClient.setQueryData(["todos"], (oldData: TodoResponse) => {
         for (let i = 0; i < oldData.todos.length; i++) {
