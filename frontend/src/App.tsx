@@ -6,7 +6,7 @@ import {
   getTodos,
   updateTodo,
 } from "./services/todoServices";
-import type { Todo, TodosResponse } from "./types/todo";
+import type { Todo, TodoResponse, TodosResponse } from "./types/todo";
 
 function App() {
   const { data, isLoading } = useQuery<TodosResponse>({
@@ -20,9 +20,9 @@ function App() {
 
   const createMutation = useMutation({
     mutationFn: createTodo,
-    onSuccess: (data: Todo) => {
-      queryClient.setQueryData(["todos"], (oldData: TodoResponse) => {
-        return { todos: oldData.todos.concat(data) };
+    onSuccess: (data: TodoResponse) => {
+      queryClient.setQueryData(["todos"], (oldData: TodosResponse) => {
+        return { todos: oldData.todos.concat(data.todo) };
       });
       setTodo("");
     },
@@ -34,7 +34,7 @@ function App() {
   const updateMutation = useMutation({
     mutationFn: updateTodo,
     onSuccess: (data: Todo) => {
-      queryClient.setQueryData(["todos"], (oldData: TodoResponse) => {
+      queryClient.setQueryData(["todos"], (oldData: TodosResponse) => {
         for (let i = 0; i < oldData.todos.length; i++) {
           if (oldData.todos[i]?.id === data.id) oldData.todos[i] = data;
         }
@@ -49,7 +49,7 @@ function App() {
   const deleteMutation = useMutation({
     mutationFn: deleteTodo,
     onSuccess: (data: Todo) => {
-      queryClient.setQueryData(["todos"], (oldData: TodoResponse) => {
+      queryClient.setQueryData(["todos"], (oldData: TodosResponse) => {
         return { todos: oldData.todos.filter((todo) => todo.id !== data.id) };
       });
     },
