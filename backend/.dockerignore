@@ -1,0 +1,6 @@
+logs
+Dockerfile
+.env*
+.dockerignore
+.gitignore
+db/migrations
