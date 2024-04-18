@@ -1,6 +1,8 @@
 import { z } from "zod";
 import type { DeleteTodo, NewTodo, UpdateTodo } from "../types/todo";
 
+const BASE_URL = "http://localhost:9000/api/todos";
+
 const todosSchema = z.object({
   todos: z.array(
     z.object({
@@ -13,7 +15,7 @@ const todosSchema = z.object({
 
 
 export const getTodos = async () => {
-  const res = await fetch("https://dummyjson.com/todos");
+  const res = await fetch(BASE_URL);
   const data = todosSchema.parse(await res.json());
 
   return data;
