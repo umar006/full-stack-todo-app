@@ -66,7 +66,7 @@ func main() {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
 
-		return c.JSON(http.StatusOK, response{"data": todos})
+		return c.JSON(http.StatusOK, response{"todos": todos})
 	})
 
 	todoRoutes.POST("", func(c echo.Context) error {
