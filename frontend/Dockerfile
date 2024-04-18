@@ -11,8 +11,7 @@ COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
 
 ENV NODE_ENV=production
-RUN --mount=type=secret,required=true,id=env export $(cat /run/secrets/env | xargs) \
-    && bun run build
+RUN bun run build
 
 FROM caddy:alpine AS release
 COPY --from=prerelease /usr/src/app/dist /usr/share/caddy
