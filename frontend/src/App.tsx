@@ -6,10 +6,10 @@ import {
   getTodos,
   updateTodo,
 } from "./services/todoServices";
-import type { Todo, TodoResponse } from "./types/todo";
+import type { Todo, TodosResponse } from "./types/todo";
 
 function App() {
-  const { data, isLoading } = useQuery<TodoResponse>({
+  const { data, isLoading } = useQuery<TodosResponse>({
     queryKey: ["todos"],
     queryFn: getTodos,
   });

@@ -1,11 +1,10 @@
 export interface Todo {
-  id: number;
+  id: string;
   todo: string;
   completed: boolean;
-  userId: number;
 }
 
-export interface TodoResponse {
+export interface TodosResponse {
   todos: Todo[];
 }
 
