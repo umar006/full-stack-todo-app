@@ -33,10 +33,11 @@ function App() {
 
   const updateMutation = useMutation({
     mutationFn: updateTodo,
-    onSuccess: (data: Todo) => {
+    onSuccess: (data: TodoResponse) => {
       queryClient.setQueryData(["todos"], (oldData: TodosResponse) => {
         for (let i = 0; i < oldData.todos.length; i++) {
-          if (oldData.todos[i]?.id === data.id) oldData.todos[i] = data;
+          if (oldData.todos[i]?.id === data.todo.id)
+            oldData.todos[i] = data.todo;
         }
         return { todos: oldData.todos };
       });

@@ -44,12 +44,14 @@ export const createTodo = async (todo: NewTodo) => {
 };
 
 export const updateTodo = async (todo: UpdateTodo) => {
-  const res = await fetch(`https://dummyjson.com/todos/${todo.id}`, {
+  const res = await fetch(`${BASE_URL}/${todo.id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ todo: todo.todo, completed: todo.completed }),
   });
-  return res.json();
+  const data = todoSchema.parse(await res.json());
+
+  return data;
 };
 
 export const deleteTodo = async (todo: DeleteTodo) => {
