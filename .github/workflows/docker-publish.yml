@@ -1,13 +1,12 @@
 name: Docker
 
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 on:
   push:
     branches: [ "main" ]
+
+env:
+  TEST_TAG: umar006/todo-ui:test
+  LATEST_TAG: umar006/todo-ui:latest
 
 jobs:
   build:
@@ -20,10 +19,23 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.2
 
       - name: Docker login
         uses: docker/login-action@v3.1.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and export to Docker
+        uses: docker/build-push-action@v5
+        with:
+          target: frontend
+          context: .
+          load: true
+          tags: ${{ env.TEST_TAG }}
+          
+      - name: Test
+        run: |
+          docker run --rm ${{ env.TEST_TAG }} 
+          
