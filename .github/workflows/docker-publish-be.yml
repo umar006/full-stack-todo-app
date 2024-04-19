@@ -5,8 +5,8 @@ on:
     branches: ["main"]
 
 env:
-  TEST_TAG: umar006/todo-ui:test
-  LATEST_TAG: umar006/todo-ui:latest
+  TEST_TAG: umar006/todo-api:test
+  LATEST_TAG: umar006/todo-api:latest
 
 jobs:
   build:
@@ -32,6 +32,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
+          context: ./backend
           push: true
           tags: ${{ env.LATEST_TAG }}
