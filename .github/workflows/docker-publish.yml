@@ -33,8 +33,7 @@ jobs:
       - name: Build and export to Docker
         uses: docker/build-push-action@v5
         with:
-          target: frontend
-          context: .
+          context: ./frontend
           load: true
           tags: ${{ env.TEST_TAG }}
           
