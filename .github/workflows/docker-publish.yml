@@ -30,14 +30,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and export to Docker
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
-          load: true
-          tags: ${{ env.TEST_TAG }}
-          
-      - name: Test
-        run: |
-          docker run --rm ${{ env.TEST_TAG }} 
-          
+          push: true
+          tags: ${{ env.LATEST_TAG }}
