@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { DeleteTodo, NewTodo, UpdateTodo } from "../types/todo";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL + "/api/todos";
+const BASE_URL = "/api/todos";
 
 const todosSchema = z.object({
   todos: z.array(
