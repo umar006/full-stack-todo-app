@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+	"errors"
 	"net/http"
 	"strings"
 
@@ -102,5 +104,34 @@ func handleSignUp(db *sqlx.DB) echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusCreated, response{"user": user})
+	}
+}
+
+func handleSignIn(db *sqlx.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		user := models.User{}
+		if err := c.Bind(&user); err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
+
+		if strings.TrimSpace(user.Username) == "" || strings.TrimSpace(user.Password) == "" {
+			return c.JSON(http.StatusBadRequest, response{"error": "username or password cannot empty"})
+		}
+
+		userFromDb := models.User{}
+		err := db.Get(&userFromDb, "SELECT id, username, password FROM users WHERE username = $1", user.Username)
+		if err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+				return c.JSON(http.StatusUnauthorized, response{"error": "username or password is wrong"})
+			}
+			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
+		}
+
+		if user.HashPassword(); user.Password != userFromDb.Password {
+			return c.JSON(http.StatusUnauthorized, response{"error": "username or password is wrong"})
+		}
+
+		userFromDb.Password = ""
+		return c.JSON(http.StatusCreated, response{"user": userFromDb})
 	}
 }

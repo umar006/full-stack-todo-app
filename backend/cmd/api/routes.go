@@ -14,4 +14,5 @@ func routes(e *echo.Echo, db *sqlx.DB) {
 
 	authRoutes := e.Group("/api/auth")
 	authRoutes.POST("/signup", handleSignUp(db))
+	authRoutes.POST("/signin", handleSignIn(db))
 }
