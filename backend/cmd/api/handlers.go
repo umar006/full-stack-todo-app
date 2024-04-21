@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -77,5 +78,25 @@ func handleDeleteTodo(db *sqlx.DB) echo.HandlerFunc {
 		}
 
 		return c.NoContent(http.StatusNoContent)
+	}
+}
+
+func handleSignUp(db *sqlx.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		user := models.User{ID: uuid.New()}
+		if err := c.Bind(&user); err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
+
+		if strings.TrimSpace(user.Username) == "" || strings.TrimSpace(user.Password) == "" {
+			return c.JSON(http.StatusBadRequest, response{"error": "username or password cannot empty"})
+		}
+
+		_, err := db.NamedExec("INSERT INTO users (id, username, password) VALUES (:id, :username, :password)", user)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusCreated, response{"user": user})
 	}
 }
