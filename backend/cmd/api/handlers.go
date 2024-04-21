@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
-	"strings"
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -90,8 +89,8 @@ func handleSignUp(db *sqlx.DB) echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, err)
 		}
 
-		if strings.TrimSpace(user.Username) == "" || strings.TrimSpace(user.Password) == "" {
-			return c.JSON(http.StatusBadRequest, response{"error": "username or password cannot empty"})
+		if err := user.Validate(); err != nil {
+			return c.JSON(http.StatusBadRequest, response{"error": err.Error()})
 		}
 
 		if err := user.HashPassword(); err != nil {
