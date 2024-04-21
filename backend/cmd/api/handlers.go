@@ -5,6 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
+
 	"todo.umaru.run/internal/models"
 )
 
@@ -18,5 +19,21 @@ func handleGetTodos(db *sqlx.DB) echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, response{"todos": todos})
+	}
+}
+
+func handleCreateTodo(db *sqlx.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		todo := models.NewTodo()
+		if err := c.Bind(&todo); err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
+
+		_, err := db.NamedExec("INSERT INTO todos (id, todo) VALUES (:id, :todo)", todo)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusCreated, response{"todo": todo})
 	}
 }

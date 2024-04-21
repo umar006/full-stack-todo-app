@@ -13,20 +13,7 @@ func routes(e *echo.Echo, db *sqlx.DB) {
 	todoRoutes := e.Group("/api/todos")
 
 	todoRoutes.GET("", handleGetTodos(db))
-
-	todoRoutes.POST("", func(c echo.Context) error {
-		todo := models.NewTodo()
-		if err := c.Bind(&todo); err != nil {
-			return c.JSON(http.StatusBadRequest, err)
-		}
-
-		_, err := db.NamedExec("INSERT INTO todos (id, todo) VALUES (:id, :todo)", todo)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err)
-		}
-
-		return c.JSON(http.StatusCreated, response{"todo": todo})
-	})
+	todoRoutes.POST("", handleCreateTodo(db))
 
 	todoRoutes.PUT("/:todoId", func(c echo.Context) error {
 		todoId := c.Param("todoId")
