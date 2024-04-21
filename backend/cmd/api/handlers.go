@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 
@@ -30,6 +31,30 @@ func handleCreateTodo(db *sqlx.DB) echo.HandlerFunc {
 		}
 
 		_, err := db.NamedExec("INSERT INTO todos (id, todo) VALUES (:id, :todo)", todo)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.JSON(http.StatusCreated, response{"todo": todo})
+	}
+}
+
+func handleUpdateTodo(db *sqlx.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		todoId := c.Param("todoId")
+		parsedTodoId, err := uuid.Parse(todoId)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, "todo not found")
+		}
+
+		todo := models.NewTodo()
+		todo.Id = parsedTodoId
+
+		if err := c.Bind(&todo); err != nil {
+			return c.JSON(http.StatusBadRequest, err)
+		}
+
+		_, err = db.NamedExec("UPDATE todos SET todo = :todo, completed = :completed WHERE id = :id", todo)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err)
 		}
