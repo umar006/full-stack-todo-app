@@ -11,8 +11,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
+	"todo.umaru.run/internal/models"
 	"todo.umaru.run/logger"
-	"todo.umaru.run/models"
 )
 
 type response map[string]any
