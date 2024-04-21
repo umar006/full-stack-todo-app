@@ -30,5 +30,10 @@ func (u *User) Validate() error {
 	if strings.TrimSpace(u.Username) == "" || strings.TrimSpace(u.Password) == "" {
 		return fmt.Errorf("username or password cannot be empty")
 	}
+
+	if len(strings.Split(u.Username, " ")) > 1 || len(strings.Split(u.Password, " ")) > 1 {
+		return fmt.Errorf("username or password cannot contains whitespace")
+	}
+
 	return nil
 }
