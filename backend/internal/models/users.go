@@ -3,6 +3,7 @@ package models
 import (
 	"crypto/sha256"
 	"fmt"
+	"strings"
 
 	"github.com/google/uuid"
 )
@@ -22,5 +23,12 @@ func (u *User) HashPassword() error {
 
 	u.Password = fmt.Sprintf("%x", hash.Sum(nil))
 
+	return nil
+}
+
+func (u *User) Validate() error {
+	if strings.TrimSpace(u.Username) == "" || strings.TrimSpace(u.Password) == "" {
+		return fmt.Errorf("username or password cannot be empty")
+	}
 	return nil
 }

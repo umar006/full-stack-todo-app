@@ -111,11 +111,11 @@ func handleSignIn(db *sqlx.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user := models.User{}
 		if err := c.Bind(&user); err != nil {
-			return c.JSON(http.StatusBadRequest, err)
+			return c.JSON(http.StatusBadRequest, response{"error": err.Error()})
 		}
 
-		if strings.TrimSpace(user.Username) == "" || strings.TrimSpace(user.Password) == "" {
-			return c.JSON(http.StatusBadRequest, response{"error": "username or password cannot empty"})
+		if err := user.Validate(); err != nil {
+			return c.JSON(http.StatusBadRequest, response{"error": err.Error()})
 		}
 
 		userFromDb := models.User{}
