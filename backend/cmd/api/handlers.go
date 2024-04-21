@@ -62,3 +62,20 @@ func handleUpdateTodo(db *sqlx.DB) echo.HandlerFunc {
 		return c.JSON(http.StatusCreated, response{"todo": todo})
 	}
 }
+
+func handleDeleteTodo(db *sqlx.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		todoId := c.Param("todoId")
+		parsedTodoId, err := uuid.Parse(todoId)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, "todo not found")
+		}
+
+		_, err = db.Exec("DELETE FROM todos WHERE id = $1", parsedTodoId)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
+		return c.NoContent(http.StatusNoContent)
+	}
+}
