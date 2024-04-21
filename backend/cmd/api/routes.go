@@ -12,16 +12,7 @@ import (
 func routes(e *echo.Echo, db *sqlx.DB) {
 	todoRoutes := e.Group("/api/todos")
 
-	todoRoutes.GET("", func(c echo.Context) error {
-		todos := []models.Todo{}
-
-		err := db.Select(&todos, "SELECT * FROM todos")
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err)
-		}
-
-		return c.JSON(http.StatusOK, response{"todos": todos})
-	})
+	todoRoutes.GET("", handleGetTodos(db))
 
 	todoRoutes.POST("", func(c echo.Context) error {
 		todo := models.NewTodo()
