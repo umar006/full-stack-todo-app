@@ -19,7 +19,7 @@ func handleGetTodos(db *sqlx.DB) echo.HandlerFunc {
 
 		err := db.Select(&todos, "SELECT * FROM todos")
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err)
+			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
 
 		return c.JSON(http.StatusOK, response{"todos": todos})
@@ -30,12 +30,12 @@ func handleCreateTodo(db *sqlx.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		todo := models.NewTodo()
 		if err := c.Bind(&todo); err != nil {
-			return c.JSON(http.StatusBadRequest, err)
+			return c.JSON(http.StatusBadRequest, response{"error": err.Error()})
 		}
 
 		_, err := db.NamedExec("INSERT INTO todos (id, todo) VALUES (:id, :todo)", todo)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err)
+			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
 
 		return c.JSON(http.StatusCreated, response{"todo": todo})
@@ -47,7 +47,7 @@ func handleUpdateTodo(db *sqlx.DB) echo.HandlerFunc {
 		todoId := c.Param("todoId")
 		parsedTodoId, err := uuid.Parse(todoId)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, "todo not found")
+			return c.JSON(http.StatusBadRequest, response{"error": "todo not found"})
 		}
 
 		todo := models.NewTodo()
@@ -59,7 +59,7 @@ func handleUpdateTodo(db *sqlx.DB) echo.HandlerFunc {
 
 		_, err = db.NamedExec("UPDATE todos SET todo = :todo, completed = :completed WHERE id = :id", todo)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err)
+			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
 
 		return c.JSON(http.StatusCreated, response{"todo": todo})
@@ -71,12 +71,12 @@ func handleDeleteTodo(db *sqlx.DB) echo.HandlerFunc {
 		todoId := c.Param("todoId")
 		parsedTodoId, err := uuid.Parse(todoId)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, "todo not found")
+			return c.JSON(http.StatusBadRequest, response{"error": "todo not found"})
 		}
 
 		_, err = db.Exec("DELETE FROM todos WHERE id = $1", parsedTodoId)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err)
+			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
 
 		return c.NoContent(http.StatusNoContent)
@@ -95,12 +95,12 @@ func handleSignUp(db *sqlx.DB) echo.HandlerFunc {
 		}
 
 		if err := user.HashPassword(); err != nil {
-			return c.JSON(http.StatusInternalServerError, err)
+			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
 
 		_, err := db.NamedExec("INSERT INTO users (id, username, password) VALUES (:id, :username, :password)", user)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err)
+			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
 
 		return c.JSON(http.StatusCreated, response{"user": user})
