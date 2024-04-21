@@ -92,6 +92,10 @@ func handleSignUp(db *sqlx.DB) echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, response{"error": "username or password cannot empty"})
 		}
 
+		if err := user.HashPassword(); err != nil {
+			return c.JSON(http.StatusInternalServerError, err)
+		}
+
 		_, err := db.NamedExec("INSERT INTO users (id, username, password) VALUES (:id, :username, :password)", user)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err)
