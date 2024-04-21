@@ -1,0 +1,18 @@
+services:
+  backend:
+    image: umar006/todo-api
+    container_name: todo-api
+    env_file:
+      - ./backend/.env
+
+  frontend:
+    image: umar006/todo-ui
+    container_name: todo-ui
+
+  proxy:
+    image: caddy
+    container_name: todo-proxy
+    ports:
+      - 80:80
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
