@@ -1,0 +1,12 @@
+services:
+  todo-api-dev:
+    container_name: todo-api-dev
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 9000:9000
+    volumes:
+      - ./:/app
