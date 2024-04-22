@@ -9,6 +9,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 
+	"todo.umaru.run/internal/auth"
 	"todo.umaru.run/internal/models"
 )
 
@@ -130,7 +131,9 @@ func handleSignIn(db *sqlx.DB) echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, response{"error": "username or password is wrong"})
 		}
 
+		token, _ := auth.GenerateJwt(userFromDb)
+
 		userFromDb.Password = ""
-		return c.JSON(http.StatusCreated, response{"user": userFromDb})
+		return c.JSON(http.StatusCreated, response{"user": userFromDb, "token": token})
 	}
 }
