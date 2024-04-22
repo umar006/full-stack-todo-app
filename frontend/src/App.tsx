@@ -8,6 +8,7 @@ import {
   updateTodo,
 } from "./services/todoServices";
 import type { TodoResponse, TodosResponse } from "./types/todo";
+import { Register } from "./components/Auth/Register";
 
 function App() {
   const { data, isLoading } = useQuery<TodosResponse>({
@@ -143,6 +144,7 @@ function App() {
   return (
     <>
       <Login />
+      <Register />
       <h1>TODO</h1>
       <form onSubmit={handleAddTodo}>
         <input
