@@ -1,21 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
-import type { RegisterForm } from "../../types/auth";
+import { register } from "../../services/authServices";
 
 export const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const mutation = useMutation({
-    mutationFn: async (register: RegisterForm) => {
-      const res = await fetch("http://localhost:9000/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(register),
-      }).then((res) => res.json());
-
-      return res;
-    },
+    mutationFn: register,
   });
 
   const handleRegister = (e: FormEvent<HTMLFormElement>) => {
