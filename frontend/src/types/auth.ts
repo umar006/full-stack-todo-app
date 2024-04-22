@@ -8,3 +8,13 @@ export interface RegisterForm {
 export interface RegisterResponse {
   user: Omit<User, "password">;
 }
+
+export interface LoginForm {
+  username: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  user: Omit<User, "password">;
+  token: string;
+}
