@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Login } from "./components/Login/Login";
+import { Login } from "./components/Auth/Login";
 import {
   createTodo,
   deleteTodo,
