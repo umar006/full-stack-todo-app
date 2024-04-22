@@ -1,11 +1,11 @@
 package models
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"strings"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -15,15 +15,19 @@ type User struct {
 }
 
 func (u *User) HashPassword() error {
-	hash := sha256.New()
-	_, err := hash.Write([]byte(u.Password))
+	hashed, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
 
-	u.Password = fmt.Sprintf("%x", hash.Sum(nil))
+	u.Password = string(hashed)
 
 	return nil
+}
+
+func (u *User) CheckPasswordHash(password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+	return err == nil
 }
 
 func (u *User) Validate() error {

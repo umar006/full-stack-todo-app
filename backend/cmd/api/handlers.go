@@ -127,7 +127,7 @@ func handleSignIn(db *sqlx.DB) echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
 
-		if user.HashPassword(); user.Password != userFromDb.Password {
+		if !userFromDb.CheckPasswordHash(user.Password) {
 			return c.JSON(http.StatusUnauthorized, response{"error": "username or password is wrong"})
 		}
 
