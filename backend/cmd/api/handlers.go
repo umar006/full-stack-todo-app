@@ -103,6 +103,7 @@ func handleSignUp(db *sqlx.DB) echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
 
+		user.Password = ""
 		return c.JSON(http.StatusCreated, response{"user": user})
 	}
 }
