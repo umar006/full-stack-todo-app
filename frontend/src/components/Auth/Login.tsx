@@ -3,7 +3,6 @@ import { useState, type FormEvent } from "react";
 import type { LoginForm } from "../../types/auth";
 
 export const Login = () => {
-  const [show, setShow] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -53,9 +52,6 @@ export const Login = () => {
             </label>
           </div>
           <div>
-            <button type="button" onClick={() => setShow((oldVal) => !oldVal)}>
-              cancel
-            </button>
             <button type="submit">login</button>
           </div>
         </form>
@@ -63,12 +59,5 @@ export const Login = () => {
     );
   };
 
-  return (
-    <>
-      {!show && (
-        <button onClick={() => setShow((oldVal) => !oldVal)}>login</button>
-      )}
-      {show && loginForm()}
-    </>
-  );
+  return <>{loginForm()}</>;
 };
