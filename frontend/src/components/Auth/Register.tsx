@@ -11,6 +11,7 @@ export const Register = () => {
     onSuccess: () => {
       setUsername("");
       setPassword("");
+      alert("success create account");
     },
   });
 

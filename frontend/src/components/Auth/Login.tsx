@@ -11,6 +11,7 @@ export const Login = () => {
     onSuccess: () => {
       setUsername("");
       setPassword("");
+      alert("success login");
     },
   });
 
