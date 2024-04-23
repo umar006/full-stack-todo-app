@@ -8,10 +8,14 @@ export const Login = () => {
 
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      window.localStorage.setItem("token", data.token);
+
       setUsername("");
       setPassword("");
       alert("success login");
+
+      window.location.reload();
     },
   });
 
