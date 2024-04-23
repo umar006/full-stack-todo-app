@@ -84,10 +84,15 @@ export const updateTodo = async (todo: UpdateTodo) => {
 export const deleteTodo = async (todo: DeleteTodo) => {
   const token = window.localStorage.getItem("token");
 
-  await fetch(`${BASE_URL}/${todo.id}`, {
+  const res = await fetch(`${BASE_URL}/${todo.id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+
+  if (!res.ok) {
+    const error = (await res.json()) as { error: string };
+    throw new Error(error.error);
+  }
 };

@@ -59,6 +59,10 @@ function App() {
         };
       });
     },
+    onError: (err) => {
+      console.error(err);
+      alert(err.message);
+    },
   });
 
   const inProgressTodoList = () => {
