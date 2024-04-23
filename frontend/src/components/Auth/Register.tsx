@@ -13,6 +13,9 @@ export const Register = () => {
       setPassword("");
       alert("success create account");
     },
+    onError: (error) => {
+      alert(error.message);
+    },
   });
 
   const handleRegister = (e: FormEvent<HTMLFormElement>) => {

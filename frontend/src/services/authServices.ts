@@ -24,7 +24,13 @@ export const register = async (
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(register),
-  }).then((res) => res.json());
+  });
 
-  return res;
+  if (!res.ok) {
+    const error = (await res.json()) as { error: string };
+
+    throw new Error(error.error);
+  }
+
+  return res.json();
 };
