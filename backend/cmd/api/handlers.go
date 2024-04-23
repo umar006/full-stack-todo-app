@@ -57,14 +57,18 @@ func handleUpdateTodo(db *sqlx.DB) echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, response{"error": "todo not found"})
 		}
 
+		userId := userIDFromToken(c)
+		parsedUserId, _ := uuid.Parse(userId)
+
 		todo := models.NewTodo()
 		todo.Id = parsedTodoId
+		todo.UserID = parsedUserId
 
 		if err := c.Bind(&todo); err != nil {
 			return c.JSON(http.StatusBadRequest, err)
 		}
 
-		_, err = db.NamedExec("UPDATE todos SET todo = :todo, completed = :completed WHERE id = :id", todo)
+		_, err = db.NamedExec("UPDATE todos SET todo = :todo, completed = :completed WHERE id = :id AND user_id = :user_id", todo)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
