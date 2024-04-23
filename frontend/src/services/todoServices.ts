@@ -70,6 +70,12 @@ export const updateTodo = async (todo: UpdateTodo) => {
     },
     body: JSON.stringify({ todo: todo.todo, completed: todo.completed }),
   });
+
+  if (!res.ok) {
+    const error = (await res.json()) as { error: string };
+    throw new Error(error.error);
+  }
+
   const data = todoSchema.parse(await res.json());
 
   return data;
