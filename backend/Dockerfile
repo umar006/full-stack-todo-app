@@ -7,7 +7,7 @@ RUN go mod download && go mod verify
 
 COPY . .
 
-RUN go build -o /go/bin/todo-api cmd/api/main.go
+RUN go build -o /go/bin/todo-api cmd/api/*
 
 FROM gcr.io/distroless/static-debian12
 COPY --from=build /go/bin/todo-api /
