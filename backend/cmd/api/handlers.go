@@ -85,7 +85,10 @@ func handleDeleteTodo(db *sqlx.DB) echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, response{"error": "todo not found"})
 		}
 
-		_, err = db.Exec("DELETE FROM todos WHERE id = $1", parsedTodoId)
+		userId := userIDFromToken(c)
+		parsedUserId, _ := uuid.Parse(userId)
+
+		_, err = db.Exec("DELETE FROM todos WHERE id = $1 AND user_id = $2", parsedTodoId, parsedUserId)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
