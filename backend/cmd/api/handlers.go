@@ -16,9 +16,7 @@ import (
 
 func handleGetTodos(db *sqlx.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		userReq := c.Get("user").(*jwt.Token)
-		claims := userReq.Claims.(jwt.MapClaims)
-		userId := claims["id"]
+		userId := userIDFromToken(c)
 
 		todos := []models.Todo{}
 
@@ -33,12 +31,16 @@ func handleGetTodos(db *sqlx.DB) echo.HandlerFunc {
 
 func handleCreateTodo(db *sqlx.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		userId := userIDFromToken(c)
+		parsedUserId, _ := uuid.Parse(userId)
+
 		todo := models.NewTodo()
 		if err := c.Bind(&todo); err != nil {
 			return c.JSON(http.StatusBadRequest, response{"error": err.Error()})
 		}
 
-		_, err := db.NamedExec("INSERT INTO todos (id, todo) VALUES (:id, :todo)", todo)
+		todo.UserID = parsedUserId
+		_, err := db.NamedExec("INSERT INTO todos (id, todo, user_id) VALUES (:id, :todo, :user_id)", todo)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
@@ -142,4 +144,10 @@ func handleSignIn(db *sqlx.DB) echo.HandlerFunc {
 		userFromDb.Password = ""
 		return c.JSON(http.StatusCreated, response{"user": userFromDb, "token": token})
 	}
+}
+
+func userIDFromToken(c echo.Context) string {
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	return claims["id"].(string)
 }
