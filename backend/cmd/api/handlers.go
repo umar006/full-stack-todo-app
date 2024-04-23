@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
@@ -15,9 +16,13 @@ import (
 
 func handleGetTodos(db *sqlx.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		userReq := c.Get("user").(*jwt.Token)
+		claims := userReq.Claims.(jwt.MapClaims)
+		userId := claims["id"]
+
 		todos := []models.Todo{}
 
-		err := db.Select(&todos, "SELECT * FROM todos")
+		err := db.Select(&todos, "SELECT * FROM todos WHERE id = $1", userId)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
