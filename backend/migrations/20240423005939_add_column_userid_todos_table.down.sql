@@ -1,0 +1,9 @@
+BEGIN;
+
+ALTER TABLE todos
+DROP CONSTRAINT fk_todos_users;
+
+ALTER TABLE todos
+DROP COLUMN user_id;
+
+COMMIT;

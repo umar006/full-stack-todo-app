@@ -1,0 +1,11 @@
+BEGIN;
+
+ALTER TABLE todos
+ADD COLUMN user_id UUID NOT NULL;
+
+ALTER TABLE todos
+ADD CONSTRAINT fk_todos_users
+FOREIGN KEY (user_id)
+REFERENCES users;
+
+COMMIT;
