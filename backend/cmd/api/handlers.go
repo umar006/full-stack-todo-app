@@ -118,7 +118,7 @@ func handleSignUp(db *sqlx.DB) echo.HandlerFunc {
 			pgErr, ok := err.(*pq.Error)
 			if ok {
 				if pgErr.Code == "23505" {
-					c.JSON(http.StatusUnprocessableEntity, response{"error": "username already exists"})
+					return c.JSON(http.StatusUnprocessableEntity, response{"error": "username already exists"})
 				}
 			}
 
