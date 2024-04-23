@@ -4,11 +4,27 @@ import { Register } from "./Register";
 
 export const Auth = () => {
   const [show, setShow] = useState("");
+  const [token, setToken] = useState(window.localStorage.getItem("token"));
+
+  const handleLogout = () => {
+    window.localStorage.removeItem("token");
+    setToken(null);
+  };
+
+  const authBtn = () => {
+    if (token) return <button onClick={handleLogout}>logout</button>;
+
+    return (
+      <>
+        <button onClick={() => setShow("login")}>login</button>
+        <button onClick={() => setShow("register")}>register</button>
+      </>
+    );
+  };
 
   return (
     <>
-      <button onClick={() => setShow("login")}>login</button>
-      <button onClick={() => setShow("register")}>register</button>
+      {authBtn()}
       {show === "login" && <Login />}
       {show === "register" && <Register />}
       {show !== "" && <button onClick={() => setShow("")}>cancel</button>}
