@@ -46,7 +46,6 @@ export const createTodo = async (todo: NewTodo) => {
     body: JSON.stringify({
       todo: todo.todo,
       completed: false,
-      userId: 1,
     }),
   });
   const data = todoSchema.parse(await res.json());
