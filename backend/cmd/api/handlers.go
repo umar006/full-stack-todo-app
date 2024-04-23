@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
+	"github.com/lib/pq"
 
 	"todo.umaru.run/internal/auth"
 	"todo.umaru.run/internal/models"
@@ -114,6 +115,13 @@ func handleSignUp(db *sqlx.DB) echo.HandlerFunc {
 
 		_, err := db.NamedExec("INSERT INTO users (id, username, password) VALUES (:id, :username, :password)", user)
 		if err != nil {
+			pgErr, ok := err.(*pq.Error)
+			if ok {
+				if pgErr.Code == "23505" {
+					c.JSON(http.StatusUnprocessableEntity, response{"error": "username already exists"})
+				}
+			}
+
 			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
 
