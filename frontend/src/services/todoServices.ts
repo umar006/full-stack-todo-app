@@ -48,6 +48,12 @@ export const createTodo = async (todo: NewTodo) => {
       completed: false,
     }),
   });
+
+  if (!res.ok) {
+    const error = (await res.json()) as { error: string };
+    throw new Error(error.error);
+  }
+
   const data = todoSchema.parse(await res.json());
 
   return data;
