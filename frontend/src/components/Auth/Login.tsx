@@ -17,6 +17,9 @@ export const Login = () => {
 
       window.location.reload();
     },
+    onError: (error) => {
+      alert(error.message);
+    },
   });
 
   const handleLogin = (e: FormEvent<HTMLFormElement>) => {
