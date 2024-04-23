@@ -20,7 +20,7 @@ func handleGetTodos(db *sqlx.DB) echo.HandlerFunc {
 
 		todos := []models.Todo{}
 
-		err := db.Select(&todos, "SELECT * FROM todos WHERE id = $1", userId)
+		err := db.Select(&todos, "SELECT * FROM todos WHERE user_id = $1", userId)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, response{"error": err.Error()})
 		}
