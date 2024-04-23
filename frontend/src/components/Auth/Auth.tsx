@@ -4,11 +4,11 @@ import { Register } from "./Register";
 
 export const Auth = () => {
   const [show, setShow] = useState("");
-  const [token, setToken] = useState(window.localStorage.getItem("token"));
+  const token = window.localStorage.getItem("token");
 
   const handleLogout = () => {
     window.localStorage.removeItem("token");
-    setToken(null);
+    window.location.reload();
   };
 
   const authBtn = () => {
