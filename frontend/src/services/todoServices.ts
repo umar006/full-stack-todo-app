@@ -22,16 +22,27 @@ const todoSchema = z.object({
 });
 
 export const getTodos = async () => {
-  const res = await fetch(BASE_URL);
+  const token = window.localStorage.getItem("token");
+
+  const res = await fetch(BASE_URL, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const data = todosSchema.parse(await res.json());
 
   return data;
 };
 
 export const createTodo = async (todo: NewTodo) => {
+  const token = window.localStorage.getItem("token");
+
   const res = await fetch(BASE_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify({
       todo: todo.todo,
       completed: false,
@@ -44,9 +55,14 @@ export const createTodo = async (todo: NewTodo) => {
 };
 
 export const updateTodo = async (todo: UpdateTodo) => {
+  const token = window.localStorage.getItem("token");
+
   const res = await fetch(`${BASE_URL}/${todo.id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     body: JSON.stringify({ todo: todo.todo, completed: todo.completed }),
   });
   const data = todoSchema.parse(await res.json());
@@ -55,7 +71,12 @@ export const updateTodo = async (todo: UpdateTodo) => {
 };
 
 export const deleteTodo = async (todo: DeleteTodo) => {
+  const token = window.localStorage.getItem("token");
+
   await fetch(`${BASE_URL}/${todo.id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
