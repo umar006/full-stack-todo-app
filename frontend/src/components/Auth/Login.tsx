@@ -8,6 +8,10 @@ export const Login = () => {
 
   const mutation = useMutation({
     mutationFn: login,
+    onSuccess: () => {
+      setUsername("");
+      setPassword("");
+    },
   });
 
   const handleLogin = (e: FormEvent<HTMLFormElement>) => {
