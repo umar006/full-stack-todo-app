@@ -97,14 +97,29 @@ function App() {
       };
 
       todos.push(
-        <li key={todo?.id}>
-          <input
-            type="checkbox"
-            onClick={() => updateMutation.mutate({ ...todo, completed: true })}
-          />
-          <span data-id={todo.id}>{todo?.todo}</span>
-          <button onClick={handleTodoEdit}>edit</button>
-          <button onClick={() => deleteMutation.mutate(todo)}>delete</button>
+        <li
+          key={todo.id}
+          className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600"
+        >
+          <div className="flex flex-row items-center ps-3">
+            <input
+              id={todo.id}
+              type="checkbox"
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              onClick={() =>
+                updateMutation.mutate({ ...todo, completed: true })
+              }
+            />
+            <label
+              htmlFor={todo.id}
+              data-id={todo.id}
+              className="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+            >
+              {todo?.todo}
+            </label>
+            <button onClick={handleTodoEdit}>edit</button>
+            <button onClick={() => deleteMutation.mutate(todo)}>delete</button>
+          </div>
         </li>,
       );
     }
@@ -122,14 +137,29 @@ function App() {
       if (!todo || !todo.completed) continue;
 
       todos.push(
-        <li key={todo?.id}>
-          <input
-            type="checkbox"
-            onClick={() => updateMutation.mutate({ ...todo, completed: false })}
-            defaultChecked
-          />
-          {todo?.todo}
-          <button onClick={() => deleteMutation.mutate(todo)}>delete</button>
+        <li
+          key={todo.id}
+          className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600"
+        >
+          <div className="flex flex-row items-center ps-3">
+            <input
+              id={todo.id}
+              type="checkbox"
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              onClick={() =>
+                updateMutation.mutate({ ...todo, completed: false })
+              }
+              defaultChecked
+            />
+            <label
+              htmlFor={todo.id}
+              data-id={todo.id}
+              className="w-full py-3 ms-2 text-sm font-medium text-gray-900"
+            >
+              {todo.todo}
+            </label>
+            <button onClick={() => deleteMutation.mutate(todo)}>delete</button>
+          </div>
         </li>,
       );
     }
@@ -159,9 +189,13 @@ function App() {
         />
         <button type="submit">add</button>
       </form>
-      <ul>{inProgressTodoList()}</ul>
+      <ul className="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+        {inProgressTodoList()}
+      </ul>
       <h2>Completed TODO</h2>
-      <ul>{completedTodoList()}</ul>
+      <ul className="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+        {completedTodoList()}
+      </ul>
     </>
   );
 }
