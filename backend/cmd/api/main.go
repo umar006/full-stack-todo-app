@@ -12,8 +12,6 @@ import (
 	"todo.umaru.run/logger"
 )
 
-type response map[string]any
-
 func main() {
 	db, err := sqlx.Connect("postgres", os.Getenv("DB_URL"))
 	if err != nil {
