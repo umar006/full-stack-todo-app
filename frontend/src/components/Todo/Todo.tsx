@@ -21,7 +21,12 @@ export const Todo = ({ todo, onChange, onDelete }: TodoProps) => {
         {todo.todo}
       </label>
       {!todo.completed && (
-        <button onClick={() => setIsEditing(true)}>edit</button>
+        <button
+          onClick={() => setIsEditing(true)}
+          className="font-bold text-center uppercase transition-all text-xs my-4 py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+        >
+          edit
+        </button>
       )}
     </>
   );
@@ -49,6 +54,7 @@ export const Todo = ({ todo, onChange, onDelete }: TodoProps) => {
             onChange({ ...todo, todo: todoEdit });
             setIsEditing(false);
           }}
+          className="placeholder:italic placeholder:text-slate-400 block bg-white w-1/4 border border-slate-300 rounded-md py-3 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
         >
           save
         </button>
@@ -66,8 +72,15 @@ export const Todo = ({ todo, onChange, onDelete }: TodoProps) => {
           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
           onChange={(e) => onChange({ ...todo, completed: e.target.checked })}
         />
-        {todoContent}
-        <button onClick={() => onDelete(todo)}>delete</button>
+        <div className="space-x-4">
+          {todoContent}
+          <button
+            onClick={() => onDelete(todo)}
+            className="rounded-lg border border-gray-900 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          >
+            delete
+          </button>
+        </div>
       </div>
     </>
   );
