@@ -25,7 +25,7 @@ export const Auth = () => {
       );
 
     return (
-      <div className="text-center my-4 space-x-4">
+      <div className="text-center my-4 space-x-2">
         <button
           onClick={() => setShow("login")}
           className="font-bold text-center uppercase transition-all text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"

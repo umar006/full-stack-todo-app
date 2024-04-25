@@ -55,7 +55,7 @@ export const Login = () => {
           </label>
           <button
             type="submit"
-            className="font-bold text-center uppercase transition-all text-xs my-4 py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+            className="font-bold text-center uppercase transition-all text-xs mt-4 mb-2 py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
           >
             login
           </button>
