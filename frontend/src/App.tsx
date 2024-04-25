@@ -44,8 +44,9 @@ function App() {
       <h1>TODO</h1>
       <form onSubmit={handleAddTodo}>
         <input
+          className="placeholder:italic placeholder:text-slate-400 block bg-white w-1/4 border border-slate-300 rounded-md py-3 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+          placeholder="Add new todo..."
           type="text"
-          placeholder="Add new todo.."
           value={todo}
           onChange={handleTodoChange}
         />
