@@ -1,16 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Auth } from "./components/Auth/Auth";
-import {
-  createTodo,
-  deleteTodo,
-  getTodos,
-  updateTodo,
-} from "./services/todoServices";
+import { TodoList } from "./components/Todo/TodoList";
+import { createTodo, getTodos } from "./services/todoServices";
 import type { TodoResponse, TodosResponse } from "./types/todo";
 
 function App() {
-  const { data, isLoading } = useQuery<TodosResponse>({
+  const data = useQuery<TodosResponse>({
     queryKey: ["todos"],
     queryFn: getTodos,
   });
@@ -33,110 +29,6 @@ function App() {
     },
   });
 
-  const updateMutation = useMutation({
-    mutationFn: updateTodo,
-    onSuccess: (data: TodoResponse) => {
-      queryClient.setQueryData(["todos"], (oldData: TodosResponse) => {
-        for (let i = 0; i < oldData.todos.length; i++) {
-          if (oldData.todos[i]?.id === data.todo.id)
-            oldData.todos[i] = data.todo;
-        }
-        return { todos: oldData.todos };
-      });
-    },
-    onError: (err) => {
-      console.error(err);
-      alert(err.message);
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteTodo,
-    onSuccess: (_: void, deleteTodo) => {
-      queryClient.setQueryData(["todos"], (oldData: TodosResponse) => {
-        return {
-          todos: oldData.todos.filter((todo) => todo.id !== deleteTodo.id),
-        };
-      });
-    },
-    onError: (err) => {
-      console.error(err);
-      alert(err.message);
-    },
-  });
-
-  const inProgressTodoList = () => {
-    if (isLoading) return "Loading...";
-    if (!data || data.todos.length === 0) return "No todo";
-
-    const todos = [];
-    for (let i = 0; i < data.todos.length; i++) {
-      const todo = data.todos[i];
-      if (!todo || todo.completed) continue;
-
-      const handleTodoEdit = () => {
-        const input = document.createElement("input");
-        input.setAttribute("value", todo.todo);
-
-        const todoQuery = document.querySelector(`[data-id="${todo.id}"]`);
-        todoQuery?.replaceWith(input);
-
-        const update = () => {
-          const span = document.createElement("span");
-          span.setAttribute("data-id", String(todo.id));
-          span.textContent = input.value;
-
-          updateMutation.mutate({ ...todo, todo: input.value.trim() });
-
-          input.replaceWith(span);
-        };
-
-        input.addEventListener("blur", update, { once: true });
-        input.setSelectionRange(todo.todo.length, todo.todo.length);
-        input.focus();
-      };
-
-      todos.push(
-        <li key={todo?.id}>
-          <input
-            type="checkbox"
-            onClick={() => updateMutation.mutate({ ...todo, completed: true })}
-          />
-          <span data-id={todo.id}>{todo?.todo}</span>
-          <button onClick={handleTodoEdit}>edit</button>
-          <button onClick={() => deleteMutation.mutate(todo)}>delete</button>
-        </li>,
-      );
-    }
-
-    return todos;
-  };
-
-  const completedTodoList = () => {
-    if (isLoading) return "Loading...";
-    if (!data || data.todos.length === 0) return "No todo";
-
-    const todos = [];
-    for (let i = 0; i < data.todos.length; i++) {
-      const todo = data.todos[i];
-      if (!todo || !todo.completed) continue;
-
-      todos.push(
-        <li key={todo?.id}>
-          <input
-            type="checkbox"
-            onClick={() => updateMutation.mutate({ ...todo, completed: false })}
-            defaultChecked
-          />
-          {todo?.todo}
-          <button onClick={() => deleteMutation.mutate(todo)}>delete</button>
-        </li>,
-      );
-    }
-
-    return todos;
-  };
-
   const handleTodoChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTodo(e.target.value);
   };
@@ -149,19 +41,25 @@ function App() {
   return (
     <>
       <Auth />
-      <h1>TODO</h1>
+      <h1 className="text-center my-8 font-semibold text-3xl">TODO</h1>
       <form onSubmit={handleAddTodo}>
-        <input
-          type="text"
-          placeholder="Add new todo.."
-          value={todo}
-          onChange={handleTodoChange}
-        />
-        <button type="submit">add</button>
+        <div className="space-x-2 flex justify-center items-center">
+          <input
+            className="placeholder:italic placeholder:text-slate-400 bg-white w-1/2 max-w-screen-sm border border-slate-300 rounded-md py-3 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+            placeholder="Add new todo..."
+            type="text"
+            value={todo}
+            onChange={handleTodoChange}
+          />
+          <button
+            type="submit"
+            className="font-bold text-center uppercase transition-all text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+          >
+            add
+          </button>
+        </div>
       </form>
-      <ul>{inProgressTodoList()}</ul>
-      <h2>Completed TODO</h2>
-      <ul>{completedTodoList()}</ul>
+      <TodoList queryTodos={data} />
     </>
   );
 }
