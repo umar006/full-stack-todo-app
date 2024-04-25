@@ -70,10 +70,7 @@ export const TodoList = ({ queryTodos }: TodoListProps) => {
       if (!todo || todo.completed) continue;
 
       todos.push(
-        <li
-          key={todo.id}
-          className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600"
-        >
+        <li key={todo.id} className="border-b border-gray-200 rounded-t-lg">
           <Todo
             todo={todo}
             onChange={handleEditTodo}
@@ -96,10 +93,7 @@ export const TodoList = ({ queryTodos }: TodoListProps) => {
       if (!todo || !todo.completed) continue;
 
       todos.push(
-        <li
-          key={todo.id}
-          className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600"
-        >
+        <li key={todo.id} className="border-b border-gray-200 rounded-t-lg">
           <Todo
             todo={todo}
             onChange={handleEditTodo}
@@ -113,14 +107,14 @@ export const TodoList = ({ queryTodos }: TodoListProps) => {
   };
 
   return (
-    <>
-      <ul className="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+    <div className="my-4 flex flex-col items-center">
+      <ul className="w-3/4 max-w-screen-md px-4 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
         {inProgressTodoList()}
       </ul>
-      <h2>Completed TODO</h2>
-      <ul className="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
+      <h2 className="my-4">Completed TODO</h2>
+      <ul className="w-3/4 max-w-screen-md px-4 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
         {completedTodoList()}
       </ul>
-    </>
+    </div>
   );
 };
