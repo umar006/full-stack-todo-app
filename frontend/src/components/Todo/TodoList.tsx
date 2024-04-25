@@ -87,8 +87,9 @@ export const TodoList = ({ queryTodos }: TodoListProps) => {
             <input
               id={todo.id}
               type="checkbox"
+              checked={todo.completed}
               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-              onClick={() =>
+              onChange={() =>
                 updateMutation.mutate({ ...todo, completed: true })
               }
             />
@@ -127,11 +128,11 @@ export const TodoList = ({ queryTodos }: TodoListProps) => {
             <input
               id={todo.id}
               type="checkbox"
+              checked={todo.completed}
               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-              onClick={() =>
+              onChange={() =>
                 updateMutation.mutate({ ...todo, completed: false })
               }
-              defaultChecked
             />
             <label
               htmlFor={todo.id}
