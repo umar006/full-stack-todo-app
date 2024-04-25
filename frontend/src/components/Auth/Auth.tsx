@@ -12,13 +12,33 @@ export const Auth = () => {
   };
 
   const authBtn = () => {
-    if (token) return <button onClick={handleLogout}>logout</button>;
+    if (token)
+      return (
+        <div className="text-center my-4">
+          <button
+            onClick={handleLogout}
+            className="font-bold text-center uppercase transition-all text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+          >
+            logout
+          </button>
+        </div>
+      );
 
     return (
-      <>
-        <button onClick={() => setShow("login")}>login</button>
-        <button onClick={() => setShow("register")}>register</button>
-      </>
+      <div className="text-center my-4 space-x-4">
+        <button
+          onClick={() => setShow("login")}
+          className="font-bold text-center uppercase transition-all text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+        >
+          login
+        </button>
+        <button
+          onClick={() => setShow("register")}
+          className="font-bold text-center uppercase transition-all text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+        >
+          register
+        </button>
+      </div>
     );
   };
 
@@ -27,7 +47,16 @@ export const Auth = () => {
       {authBtn()}
       {show === "login" && <Login />}
       {show === "register" && <Register />}
-      {show !== "" && <button onClick={() => setShow("")}>cancel</button>}
+      {show !== "" && (
+        <div className="text-center">
+          <button
+            onClick={() => setShow("")}
+            className="rounded-lg border border-gray-900 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          >
+            cancel
+          </button>
+        </div>
+      )}
     </>
   );
 };
