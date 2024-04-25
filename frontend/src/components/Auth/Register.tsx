@@ -27,10 +27,10 @@ export const Register = () => {
   const registerForm = () => {
     return (
       <div className="flex flex-col items-center text-center">
-        <h1>REGISTER</h1>
+        <h1 className="font-semibold text-2xl my-2">REGISTER</h1>
         <form onSubmit={handleRegister}>
           <label>
-            username:
+            <span className="font-semibold">username</span>
             <input
               type="text"
               value={username}
@@ -40,7 +40,7 @@ export const Register = () => {
             />
           </label>
           <label>
-            password:
+            <span className="font-semibold">password</span>
             <input
               type="password"
               value={password}

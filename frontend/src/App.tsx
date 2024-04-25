@@ -41,7 +41,7 @@ function App() {
   return (
     <>
       <Auth />
-      <h1>TODO</h1>
+      <h1 className="text-center my-8 font-semibold text-3xl">TODO</h1>
       <form onSubmit={handleAddTodo}>
         <div className="space-x-2 flex justify-center items-center">
           <input

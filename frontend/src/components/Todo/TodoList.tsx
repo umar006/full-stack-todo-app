@@ -111,7 +111,7 @@ export const TodoList = ({ queryTodos }: TodoListProps) => {
       <ul className="w-3/4 max-w-screen-md px-4 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
         {inProgressTodoList()}
       </ul>
-      <h2 className="my-4">Completed TODO</h2>
+      <h2 className="my-4 font-semibold text-2xl">Completed TODO</h2>
       <ul className="w-3/4 max-w-screen-md px-4 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg">
         {completedTodoList()}
       </ul>

@@ -31,10 +31,10 @@ export const Login = () => {
   const loginForm = () => {
     return (
       <div className="flex flex-col items-center text-center">
-        <h1>LOGIN</h1>
+        <h1 className="font-semibold text-2xl my-2">LOGIN</h1>
         <form onSubmit={handleLogin}>
           <label>
-            username:
+            <span className="font-semibold">username</span>
             <input
               type="text"
               value={username}
@@ -44,7 +44,7 @@ export const Login = () => {
             />
           </label>
           <label>
-            password:
+            <span className="font-semibold">password</span>
             <input
               type="password"
               value={password}
