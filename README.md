@@ -4,7 +4,7 @@ This is a full-stack TODO app that allows users to manage their tasks efficientl
 
 ## Demo
 
-[todo.umaru.run](https://todo.umaru.run/)
+~~todo.umaru.run~~ -> under maintenance
 
 ## Features
 
